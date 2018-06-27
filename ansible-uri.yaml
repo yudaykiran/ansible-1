@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  tasks:
+    - uri:
+        url: https://cloudbyte.testrail.com/index.php?/api/v2/add_result_for_case/1650/166292
+        method: POST
+        user: user
+        password: pass
+        body: { "status_id": 1,  "comment": "the test is passed", "defects": "TR-7", "version": "1.7 RC", "assignedto_id": 1, "elapsed": "5m" }
+        force_basic_auth: yes
+        status_code: 200
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+    - name: Update the result
+      lineinfile:
+        path: "{{ansible_env.HOME}}/result.csv"
+        line: '{{ ansible_date_time.time }} TEST: 1 , RESULT: Passed'
